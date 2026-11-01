@@ -1,0 +1,134 @@
+/* 1. Navigation Buttons (Dashboard, Medicine, etc.) */
+.nav-btn {
+    -fx-background-color: white;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-fill: #334155;
+    -fx-font-size: 14px;
+}
+
+/* When Mouse Hovers Over Button */
+.nav-btn:hover {
+    -fx-background-color: #eff6ff; /* Light Blue tint */
+    -fx-border-color: #3b82f6;     /* Blue Border */
+    -fx-text-fill: #3b82f6;        /* Blue Text */
+    -fx-cursor: hand;
+}
+
+/* When Button is Pressed */
+.nav-btn:pressed {
+    -fx-background-color: #3b82f6; /* Solid Blue */
+    -fx-text-fill: white;          /* White Text */
+    -fx-border-color: #2563eb;
+}
+
+/* 2. Logout Button */
+.logout-btn {
+    -fx-background-color: #ef4444; /* Good Red */
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    /* Add Shade (Drop Shadow) */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+
+.logout-btn:hover {
+    -fx-background-color: #dc2626; /* Darker Red */
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.4), 8, 0, 0, 3);
+}
+
+.logout-btn:pressed {
+    -fx-background-color: #b91c1c; /* Even Darker Red */
+    -fx-effect: none; /* Remove shadow to look like it was pushed in */
+}
+
+
+.nav-btn-active {
+    -fx-background-color: #3b82f6; /* Solid Blue Background */
+    -fx-text-fill: white;          /* White Text */
+    -fx-border-color: #2563eb;     /* Darker Blue Border */
+    -fx-font-weight: bold;         /* Bold Text */
+    -fx-effect: dropshadow(three-pass-box, rgba(59, 130, 246, 0.4), 10, 0, 0, 3); /* Blue Glow */
+}
+
+/* Login Button Style */
+.login-btn {
+    -fx-background-color: #3b82f6; /* Normal Blue */
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-cursor: hand;
+}
+
+/* Hover Effect (Darker Blue + Shadow) */
+.login-btn:hover {
+    -fx-background-color: #2563eb; /* Darker Blue */
+    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.4), 10, 0, 0, 3); /* Blue Glow */
+}
+
+/* Pressed Effect */
+.login-btn:pressed {
+    -fx-background-color: #1d4ed8; /* Even Darker Blue */
+    -fx-effect: none;
+}
+
+/* The main container of the alert */
+.dialog-pane {
+    -fx-background-color: #ffffff;
+    -fx-font-family: 'Segoe UI', sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* The header text (e.g., "Confirm Deletion") */
+.dialog-pane > .header-panel {
+    -fx-background-color: #f3f4f6; /* Light gray header */
+    -fx-padding: 10px;
+}
+
+.dialog-pane > .header-panel > .label {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #333333;
+}
+
+/* The content text (e.g., "Are you sure...?") */
+.dialog-pane > .content.label {
+    -fx-text-fill: #555555;
+    -fx-padding: 10px;
+}
+
+/* ALL Buttons inside the alert */
+.dialog-pane .button {
+    -fx-background-color: #e0e0e0;
+    -fx-text-fill: black;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+    -fx-padding: 8px 15px;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: #d0d0d0;
+}
+
+/* --- SPECIFIC STYLES FOR DANGER ACTIONS (DELETE) --- */
+.delete-alert .button-bar > .container > .button:default {
+    -fx-background-color: #dc3545; /* Red */
+    -fx-text-fill: white;
+}
+.delete-alert .button-bar > .container > .button:default:hover {
+    -fx-background-color: #c82333; /* Darker Red */
+}
+
+/* --- SPECIFIC STYLES FOR UPDATE ACTIONS --- */
+.update-alert .button-bar > .container > .button:default {
+    -fx-background-color: #0d6efd; /* Blue */
+    -fx-text-fill: white;
+}
+.update-alert .button-bar > .container > .button:default:hover {
+    -fx-background-color: #0b5ed7; /* Darker Blue */
+}
