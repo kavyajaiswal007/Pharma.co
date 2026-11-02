@@ -1,5 +1,9 @@
 target/
+**/target/
+node_modules/
+dist/
 !.mvn/wrapper/maven-wrapper.jar
+!backend/.mvn/wrapper/maven-wrapper.jar
 .kotlin
 
 ### IntelliJ IDEA ###
@@ -25,12 +29,14 @@ target/
 /.nb-gradle/
 build/
 
-### VS Code ###
+### VS Code & Agents ###
 .vscode/
+.agents/
 
 ### Mac OS ###
 .DS_Store
 
 ### H2 & Local Data ###
 data/
+**/data/
 *.db

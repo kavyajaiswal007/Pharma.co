@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pharma.Co — Clinical Apothecary &amp; Inventory OS</title>
+    <!-- Tailwind CSS (Utility Framework) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        deepblack: '#060709',
+                        charcoal: '#0e0f13',
+                        emeraldaccent: {
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Dark Liquid Glass Design System -->
+    <link rel="stylesheet" href="/liquid-glass.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-[#060709] text-zinc-100 font-sans antialiased min-h-screen selection:bg-emerald-500/20 selection:text-white">
+
+    <!-- ================= LOGIN SCREEN ================= -->
+    <div id="login-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 glass-modal-backdrop">
+        <div class="glass-card max-w-4xl w-full flex flex-col md:flex-row overflow-hidden border border-white/[0.16] shadow-2xl">
+            <!-- Left Console Identity Column -->
+            <div class="md:w-1/2 p-10 flex flex-col justify-between border-b md:border-b-0 md:border-r border-white/[0.08] bg-white/[0.02]">
+                <div>
+                    <div class="flex items-center gap-2.5 mb-6">
+                        <div class="w-9 h-9 rounded-xl bg-white/[0.08] border border-white/[0.18] flex items-center justify-center shadow-inner">
+                            <i data-lucide="pill" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+                        <span class="glass-badge text-[11px] font-mono text-zinc-300">Enterprise OS 2.0</span>
+                    </div>
+
+                    <h1 class="text-3xl font-bold tracking-tight text-white">pharma<span class="text-emerald-400">.Co</span></h1>
+                    <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                        Precision apothecary inventory control, compliant retail POS and clinical dispensary intelligence.
+                    </p>
+                </div>
+
+                <!-- Monospace Credential Registry Drawer -->
+                <div class="mt-8 pt-6 border-t border-white/[0.06]">
+                    <p class="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 mb-2">Authorised Demonstrator Access</p>
+                    <div class="glass-well p-3 space-y-2 text-xs">
+                        <div class="flex items-center justify-between text-zinc-400">
+                            <span class="font-medium">Administrator</span>
+                            <button type="button" onclick="fillDemoLogin('admin', '123')" class="font-mono text-zinc-200 hover:text-emerald-400 transition" title="Click to auto-fill">admin / 123</button>
+                        </div>
+                        <div class="flex items-center justify-between text-zinc-400">
+                            <span class="font-medium">Staff Dispensary</span>
+                            <button type="button" onclick="fillDemoLogin('isuru', '456')" class="font-mono text-zinc-200 hover:text-emerald-400 transition" title="Click to auto-fill">isuru / 456</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Secure Authentication Form -->
+            <div class="md:w-1/2 p-10 flex flex-col justify-center">
+                <div class="mb-6">
+                    <h2 class="text-xl font-bold tracking-tight text-white">System Sign In</h2>
+                    <p class="text-zinc-400 text-xs mt-1">Authenticate to access the clinical control center</p>
+                </div>
+
+                <div id="login-error" class="hidden mb-4 p-3 bg-red-950/40 border border-red-500/30 text-red-300 text-xs rounded-xl flex items-center gap-2">
+                    <i data-lucide="alert-circle" class="w-4 h-4 shrink-0 text-red-400"></i>
+                    <span id="login-error-text">Invalid username or passkey</span>
+                </div>
+
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Operator ID or Email</label>
+                        <div class="relative">
+                            <i data-lucide="user" class="w-4 h-4 absolute left-3.5 top-3 text-zinc-500"></i>
+                            <input type="text" id="login-username" value="admin" required
+                                   class="glass-input w-full pl-10 pr-4 py-2.5">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Passkey</label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="w-4 h-4 absolute left-3.5 top-3 text-zinc-500"></i>
+                            <input type="password" id="login-password" value="123" required
+                                   class="glass-input w-full pl-10 pr-4 py-2.5">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs pt-1">
+                        <label class="flex items-center text-zinc-400 cursor-pointer select-none">
+                            <input type="checkbox" checked class="rounded border-white/20 bg-white/5 text-emerald-500 focus:ring-emerald-500 mr-2">
+                            <span>Keep session active</span>
+                        </label>
+                        <button type="button" onclick="openForgotPassword()" class="text-zinc-400 hover:text-white transition">Reset passkey</button>
+                    </div>
+
+                    <button type="submit" class="glass-btn-primary w-full py-2.5 text-xs font-semibold mt-2">
+                        <span>Authenticate Session</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= FORGOT PASSWORD MODAL ================= -->
+    <div id="forgot-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 glass-modal-backdrop">
+        <div class="glass-modal-sheet max-w-md w-full p-6">
+            <div class="flex items-center justify-between pb-4 border-b border-white/[0.08]">
+                <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                    <i data-lucide="key" class="w-4 h-4 text-zinc-400"></i>
+                    <span>Credential Recovery</span>
+                </h3>
+                <button onclick="closeForgotPassword()" class="text-zinc-400 hover:text-white transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+            </div>
+            <form id="forgot-form" class="space-y-4 mt-4">
+                <p class="text-xs text-zinc-400">Specify the operator email registered with your dispensary account.</p>
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Registered Email</label>
+                    <input type="email" id="forgot-email" placeholder="admin@pharmaco.com" required
+                           class="glass-input w-full px-3 py-2">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-zinc-300 mb-1.5">New Security Passkey</label>
+                    <input type="password" id="forgot-new-pwd" placeholder="Enter new passkey" required
+                           class="glass-input w-full px-3 py-2">
+                </div>
+                <div class="flex gap-2 pt-1">
+                    <button type="button" onclick="closeForgotPassword()" class="glass-btn-secondary flex-1 py-2 text-xs">Cancel</button>
+                    <button type="submit" class="glass-btn-primary flex-1 py-2 text-xs font-semibold">Update Key</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MAIN APPLICATION LAYOUT ================= -->
+    <div id="app-layout" class="hidden flex h-screen overflow-hidden bg-[#060709]">
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="w-64 glass-panel flex flex-col shrink-0 select-none z-20">
+            <!-- Brand Mark Header -->
+            <div class="p-5 flex items-center gap-3 border-b border-white/[0.08]">
+                <div class="w-9 h-9 rounded-xl bg-white/[0.07] border border-white/[0.18] flex items-center justify-center shrink-0 shadow-inner">
+                    <i data-lucide="pill" class="w-4 h-4 text-emerald-400"></i>
+                </div>
+                <div class="overflow-hidden">
+                    <h2 class="font-bold text-white text-base tracking-tight truncate flex items-center gap-0.5">
+                        <span>pharma</span><span class="text-emerald-400">.Co</span>
+                    </h2>
+                    <p class="text-[10px] text-zinc-500 font-mono tracking-wider uppercase">Clinical OS 2.0</p>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="p-3 flex-1 overflow-y-auto space-y-1">
+                <div class="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider px-3 my-2">Command Center</div>
+
+                <button onclick="navigate('dashboard')" id="nav-dashboard" class="nav-item">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                    <span>Dashboard</span>
+                </button>
+
+                <button onclick="navigate('order')" id="nav-order" class="nav-item">
+                    <i data-lucide="zap" class="w-4 h-4"></i>
+                    <span>Express POS</span>
+                </button>
+
+                <button onclick="navigate('medicines')" id="nav-medicines" class="nav-item">
+                    <i data-lucide="pill" class="w-4 h-4"></i>
+                    <span>Catalog &amp; Stock</span>
+                </button>
+
+                <button onclick="navigate('customers')" id="nav-customers" class="nav-item">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                    <span>Client Directory</span>
+                </button>
+
+                <button onclick="navigate('suppliers')" id="nav-suppliers" class="nav-item">
+                    <i data-lucide="truck" class="w-4 h-4"></i>
+                    <span>Supply Partners</span>
+                </button>
+
+                <button onclick="navigate('supply')" id="nav-supply" class="nav-item">
+                    <i data-lucide="package-plus" class="w-4 h-4"></i>
+                    <span>Inflow Restock</span>
+                </button>
+
+                <button onclick="navigate('ai')" id="nav-ai" class="nav-item">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    <span>Clinical Heuristic Lab</span>
+                </button>
+
+                <button onclick="navigate('users')" id="nav-users" class="nav-item">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>Staff Governance</span>
+                </button>
+            </div>
+
+            <!-- Footer: Controls & Operator Identity -->
+            <div class="p-4 border-t border-white/[0.08] space-y-3 bg-black/20">
+                <div class="flex items-center justify-between px-1">
+                    <button onclick="toggleAudio()" id="btn-sound-toggle" title="Toggle Sound Feedback"
+                            class="glass-btn-secondary px-2.5 py-1.5 text-xs flex items-center gap-1.5">
+                        <i data-lucide="volume-2" class="w-3.5 h-3.5 text-emerald-400" id="sound-icon"></i>
+                        <span class="text-[11px]" id="sound-label">Audio ON</span>
+                    </button>
+
+                    <button onclick="toggleDarkMode()" title="Toggle Visual Mode"
+                            class="glass-btn-secondary p-1.5 text-zinc-400 hover:text-white">
+                        <i data-lucide="moon" class="w-3.5 h-3.5" id="theme-icon"></i>
+                    </button>
+                </div>
+
+                <div class="flex items-center gap-3 pt-1">
+                    <div class="w-8 h-8 rounded-lg bg-white/[0.08] border border-white/[0.16] text-white font-bold flex items-center justify-center text-xs" id="user-avatar">
+                        A
+                    </div>
+                    <div class="overflow-hidden flex-1">
+                        <p class="font-semibold text-white text-xs leading-tight truncate" id="current-username">Admin User</p>
+                        <p class="text-[10px] text-zinc-400 font-mono" id="current-role">ADMINISTRATOR</p>
+                    </div>
+                    <button onclick="handleLogout()" title="Sign Out" class="p-1.5 text-zinc-400 hover:text-red-400 transition">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN VIEW WRAPPER -->
+        <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#060709]">
+            <!-- Top App Header Bar -->
+            <header class="h-14 glass-header px-8 flex items-center justify-between shrink-0 z-10">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-sm font-semibold tracking-tight text-white" id="page-title">Dashboard Overview</h1>
+                    <span class="glass-badge text-[10px] font-mono text-zinc-400">Spring Boot 3.3 Edition</span>
+                </div>
+                <div class="flex items-center gap-4 text-xs">
+                    <div class="flex items-center gap-1.5 text-zinc-400 font-mono text-xs">
+                        <i data-lucide="clock" class="w-3.5 h-3.5 text-zinc-500"></i>
+                        <span id="live-datetime">2026-11-03</span>
+                    </div>
+                    <div class="hidden md:flex items-center gap-1.5 text-zinc-400 text-xs">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        <span class="font-mono text-[11px]">H2 Storage Engine Active</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Scrollable Content View Area -->
+            <div class="flex-1 overflow-y-auto p-8 relative z-0" id="view-container">
+
+                <!-- ========== 1. DASHBOARD VIEW ========== -->
+                <section id="view-dashboard" class="space-y-6">
+                    <!-- Executive Intelligence Banner -->
+                    <div class="glass-card p-5 flex items-center justify-between">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-8 h-8 rounded-lg bg-white/[0.06] border border-white/[0.12] flex items-center justify-center shrink-0">
+                                <i data-lucide="info" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                            <div>
+                                <p class="text-[10px] font-mono uppercase tracking-wider text-zinc-500">Clinical Apothecary Intelligence</p>
+                                <p class="text-xs text-zinc-200 mt-0.5 font-medium" id="dash-fun-fact">Loading clinical insight...</p>
+                            </div>
+                        </div>
+                        <button onclick="navigate('order')" class="glass-btn-secondary text-xs">
+                            <span>Open POS Terminal</span>
+                            <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                        </button>
+                    </div>
+
+                    <!-- 4 Metric Glass Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="glass-card p-5 flex items-center justify-between">
+                            <div>
+                                <p class="text-[11px] font-medium text-zinc-400">Catalog Inventory</p>
+                                <h3 class="text-2xl font-bold tracking-tight text-white mt-1" id="dash-total-meds">0</h3>
+                                <p class="text-[10px] text-zinc-500 font-mono mt-1">Formulations Active</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.10] flex items-center justify-center">
+                                <i data-lucide="pill" class="w-4 h-4 text-zinc-400"></i>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5 flex items-center justify-between">
+                            <div>
+                                <p class="text-[11px] font-medium text-zinc-400">Registered Clients</p>
+                                <h3 class="text-2xl font-bold tracking-tight text-white mt-1" id="dash-active-customers">0</h3>
+                                <p class="text-[10px] text-zinc-500 font-mono mt-1">Enrolled In Loyalty</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.10] flex items-center justify-center">
+                                <i data-lucide="users" class="w-4 h-4 text-zinc-400"></i>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5 flex items-center justify-between">
+                            <div>
+                                <p class="text-[11px] font-medium text-zinc-400">Session Revenue</p>
+                                <h3 class="text-2xl font-bold tracking-tight text-white mt-1 font-mono" id="dash-today-income">Rs. 0</h3>
+                                <p class="text-[10px] text-zinc-400 font-mono mt-1" id="dash-orders-count">0 orders fulfilled</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.10] flex items-center justify-center">
+                                <i data-lucide="receipt" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5 flex items-center justify-between">
+                            <div>
+                                <p class="text-[11px] font-medium text-zinc-400">Cumulative Inflow</p>
+                                <h3 class="text-2xl font-bold tracking-tight text-white mt-1 font-mono" id="dash-total-revenue">Rs. 0</h3>
+                                <p class="text-[10px] text-zinc-500 font-mono mt-1">Total Settled</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.10] flex items-center justify-center">
+                                <i data-lucide="trending-up" class="w-4 h-4 text-zinc-400"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart + Expiring Radar -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Revenue Trajectory Chart -->
+                        <div class="lg:col-span-2 glass-card p-6 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-bold text-white text-sm">Revenue Trajectory &amp; Velocity</h3>
+                                    <p class="text-xs text-zinc-400">Dispensary sales performance across settlement cycles</p>
+                                </div>
+                                <span class="glass-badge text-[10px] font-mono">Real-Time JPA Inflow</span>
+                            </div>
+                            <div class="h-64">
+                                <canvas id="pharmaSalesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Expiring Radar -->
+                        <div class="glass-card p-6 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-bold text-white text-sm">Expiring Soon Threshold</h3>
+                                    <p class="text-xs text-zinc-400">Units within 60 days of shelf expiration</p>
+                                </div>
+                                <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400"></i>
+                            </div>
+
+                            <div class="flex-1 overflow-y-auto max-h-60 text-xs">
+                                <table class="w-full text-left">
+                                    <thead>
+                                        <tr class="text-[10px] font-mono uppercase text-zinc-500 border-b border-white/[0.08]">
+                                            <th class="py-2">Pill Formulation</th>
+                                            <th class="py-2">Stock</th>
+                                            <th class="py-2">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dash-expiring-tbody" class="divide-y divide-white/[0.05]">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Low Stock Alerts -->
+                    <div class="glass-card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-white text-sm">Inventory Depletion Radar (&lt; 30 Units)</h3>
+                                <p class="text-xs text-zinc-400">Stock lines approaching replenishment thresholds</p>
+                            </div>
+                            <button onclick="navigate('supply')" class="text-xs text-emerald-400 hover:text-emerald-300 font-medium transition flex items-center gap-1">
+                                <span>Refill Inflow</span>
+                                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="glass-table">
+                                <thead>
+                                    <tr>
+                                        <th>Identifier</th>
+                                        <th>Formulation Name</th>
+                                        <th>Brand</th>
+                                        <th>Category</th>
+                                        <th>Remaining Units</th>
+                                        <th>Unit Price</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="dash-lowstock-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========== 2. EXPRESS POS BILLING VIEW ========== -->
+                <section id="view-order" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Left 2 Cols: Cart & Formulations -->
+                        <div class="lg:col-span-2 space-y-4">
+                            <!-- Selection Card -->
+                            <div class="glass-card p-6 space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pb-4 border-b border-white/[0.08]">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Registered Client Selection</label>
+                                        <select id="pos-customer" onchange="onPosCustomerChange()"
+                                                class="glass-input w-full px-3 py-2">
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Client Profile / Loyalty Tier</label>
+                                        <div class="flex items-center gap-2">
+                                            <input type="text" id="pos-customer-details" readonly placeholder="Walk-in Retail Customer"
+                                                   class="glass-input w-full px-3 py-2 text-zinc-400">
+                                            <span id="pos-loyalty-badge" class="glass-badge whitespace-nowrap">Bronze</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Medicine Selection -->
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 items-end">
+                                    <div class="md:col-span-2">
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Select Formulation / Pill</label>
+                                        <select id="pos-medicine" onchange="onPosMedicineChange()"
+                                                class="glass-input w-full px-3 py-2">
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Stock on Hand</label>
+                                        <input type="text" id="pos-qty-on-hand" readonly placeholder="0"
+                                               class="glass-input w-full px-3 py-2 font-mono text-zinc-300">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Unit Price</label>
+                                        <input type="text" id="pos-unit-price" readonly placeholder="Rs. 0.00"
+                                               class="glass-input w-full px-3 py-2 font-mono text-zinc-200">
+                                    </div>
+                                </div>
+
+                                <div class="flex items-end gap-3 pt-1">
+                                    <div class="w-32">
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Dispense Qty</label>
+                                        <input type="number" id="pos-qty" min="1" value="1"
+                                               class="glass-input w-full px-3 py-2 font-mono font-semibold">
+                                    </div>
+                                    <button type="button" onclick="addToCart()" class="glass-btn-primary">
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                        <span>Add to Cart Manifest</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Cart Manifest Table -->
+                            <div class="glass-card p-6 flex flex-col">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="font-bold text-white text-sm">Dispensary Cart Manifest</h3>
+                                        <p class="text-xs text-zinc-400">Active medicines staged for order settlement</p>
+                                    </div>
+                                    <button onclick="clearCart()" class="text-xs text-zinc-400 hover:text-red-400 transition">Empty Manifest</button>
+                                </div>
+
+                                <div class="overflow-x-auto min-h-[200px]">
+                                    <table class="glass-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Identifier</th>
+                                                <th>Formulation &amp; Brand</th>
+                                                <th>Qty</th>
+                                                <th>Unit Price</th>
+                                                <th>Line Total</th>
+                                                <th class="text-center">Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="pos-cart-tbody">
+                                            <tr><td colspan="6" class="p-8 text-center text-zinc-500 text-xs">Cart manifest is empty. Select a formulation above.</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right 1 Col: Settlement Terminal -->
+                        <div class="glass-card p-6 flex flex-col justify-between">
+                            <div class="space-y-4">
+                                <div>
+                                    <h3 class="font-bold text-white text-sm">Checkout Terminal</h3>
+                                    <p class="text-xs text-zinc-400">Order calculation and currency tender</p>
+                                </div>
+
+                                <!-- Net Amount Card -->
+                                <div class="glass-well p-5 text-center">
+                                    <p class="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">Net Amount Due</p>
+                                    <h2 class="text-3xl font-bold tracking-tight text-white font-mono mt-1" id="pos-net-total">Rs. 0.00</h2>
+                                    <p class="text-[11px] text-zinc-400 mt-1" id="pos-discount-note">No discount applied</p>
+                                </div>
+
+                                <!-- Promo Voucher -->
+                                <div class="glass-well p-3.5 space-y-2">
+                                    <label class="block text-[11px] font-semibold text-zinc-300">Promo / Benefit Voucher</label>
+                                    <div class="flex gap-2">
+                                        <input type="text" id="pos-coupon" placeholder="e.g. MAGICPILL"
+                                               class="glass-input w-full px-3 py-1.5 font-mono uppercase text-xs">
+                                        <button onclick="applyPromoCode()" class="glass-btn-secondary px-3 py-1.5 text-xs">
+                                            Apply
+                                        </button>
+                                    </div>
+                                    <div class="flex flex-wrap gap-1.5 pt-1">
+                                        <button onclick="setPromo('MAGICPILL')" class="glass-badge text-[10px] font-mono hover:border-zinc-300 transition">MAGICPILL (-15%)</button>
+                                        <button onclick="setPromo('STUDENTREVIVE')" class="glass-badge text-[10px] font-mono hover:border-zinc-300 transition">STUDENTREVIVE (-10%)</button>
+                                        <button onclick="setPromo('HAPPYPILL')" class="glass-badge text-[10px] font-mono hover:border-zinc-300 transition">HAPPYPILL (-100 Rs)</button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Settlement Method</label>
+                                    <select id="pos-payment-method" class="glass-input w-full px-3 py-2 text-xs">
+                                        <option value="Cash">Cash Currency</option>
+                                        <option value="Card">Debit / Credit Card</option>
+                                        <option value="Online">UPI / Digital Clearance</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Cash Tendered (Rs)</label>
+                                    <input type="number" id="pos-cash-received" step="0.01" placeholder="Enter tender amount"
+                                           oninput="calculatePosBalance()"
+                                           class="glass-input w-full px-3 py-2 font-mono text-sm font-semibold">
+                                </div>
+
+                                <div class="glass-well p-3 flex items-center justify-between text-xs">
+                                    <span class="text-zinc-400">Change Returned:</span>
+                                    <span class="text-base font-bold font-mono text-emerald-400" id="pos-balance">Rs. 0.00</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-6">
+                                <button type="button" onclick="placeOrder()" class="glass-btn-primary w-full py-3 text-xs font-semibold">
+                                    <i data-lucide="check" class="w-4 h-4"></i>
+                                    <span>Fulfill Order &amp; Issue Receipt</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========== 3. MEDICINES CATALOG VIEW ========== -->
+                <section id="view-medicines" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Left Form -->
+                        <div class="glass-card p-6">
+                            <h3 class="font-bold text-white text-sm mb-4">Pill &amp; Formulation Specification</h3>
+                            <form id="medicine-form" class="space-y-3.5">
+                                <input type="hidden" id="med-id">
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Medication Name *</label>
+                                    <input type="text" id="med-name" required placeholder="e.g. Paracetamol 500mg"
+                                           class="glass-input w-full px-3 py-2">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Brand Name *</label>
+                                    <input type="text" id="med-brand" required placeholder="e.g. Panadol"
+                                           class="glass-input w-full px-3 py-2">
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1">Inventory Qty *</label>
+                                        <input type="number" id="med-qty" required placeholder="100" min="0"
+                                               class="glass-input w-full px-3 py-2 font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1">Unit Price (Rs) *</label>
+                                        <input type="number" id="med-price" required step="0.01" placeholder="25.00" min="0"
+                                               class="glass-input w-full px-3 py-2 font-mono">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1">Therapeutic Class</label>
+                                        <select id="med-category" class="glass-input w-full px-3 py-2">
+                                            <option value="Pain Relief">Pain Relief</option>
+                                            <option value="Immunity Boosters">Immunity Boosters</option>
+                                            <option value="Antibiotics">Antibiotics</option>
+                                            <option value="Digestive Health">Digestive Health</option>
+                                            <option value="Brain &amp; Focus">Brain &amp; Focus</option>
+                                            <option value="Beauty &amp; Glow">Beauty &amp; Glow</option>
+                                            <option value="Bone Health">Bone Health</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-semibold text-zinc-300 mb-1">Clinical Tag</label>
+                                        <input type="text" id="med-tag" placeholder="e.g. Bestseller"
+                                               class="glass-input w-full px-3 py-2">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Expiry Date *</label>
+                                    <input type="date" id="med-exp" required
+                                           class="glass-input w-full px-3 py-2 font-mono">
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 pt-2">
+                                    <button type="button" onclick="saveMedicine()" class="glass-btn-primary py-2 text-xs">Save Formulation</button>
+                                    <button type="button" onclick="updateMedicine()" class="glass-btn-secondary py-2 text-xs">Update Details</button>
+                                    <button type="button" onclick="deleteMedicine()" class="glass-btn-danger py-2 text-xs">Archive</button>
+                                    <button type="button" onclick="clearMedicineForm()" class="glass-btn-ghost py-2 text-xs">Reset Form</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Right Table -->
+                        <div class="lg:col-span-2 glass-card p-6 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-bold text-white text-sm">Formulation Catalog</h3>
+                                    <p class="text-xs text-zinc-400">Click any row to load into editor</p>
+                                </div>
+                                <div class="relative w-64">
+                                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-zinc-500"></i>
+                                    <input type="text" id="med-search" oninput="loadMedicines(this.value)" placeholder="Search pill or brand..."
+                                           class="glass-input w-full pl-9 pr-3 py-1.5 text-xs">
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto flex-1 max-h-[480px]">
+                                <table class="glass-table">
+                                    <thead class="sticky top-0 z-10">
+                                        <tr>
+                                            <th>Identifier</th>
+                                            <th>Formulation Name</th>
+                                            <th>Brand</th>
+                                            <th>Stock</th>
+                                            <th>Unit Price</th>
+                                            <th>Expiry</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="medicines-tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========== 4. CUSTOMERS VIEW ========== -->
+                <section id="view-customers" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="glass-card p-6">
+                            <h3 class="font-bold text-white text-sm mb-4">Client Record Registration</h3>
+                            <form id="customer-form" class="space-y-4">
+                                <input type="hidden" id="cust-id">
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Full Legal Name *</label>
+                                    <input type="text" id="cust-name" required placeholder="John Doe"
+                                           class="glass-input w-full px-3 py-2">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Contact Hotline *</label>
+                                    <input type="text" id="cust-contact" required placeholder="0771234567"
+                                           class="glass-input w-full px-3 py-2 font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Prescription Address</label>
+                                    <textarea id="cust-address" rows="3" placeholder="Residential delivery address..."
+                                              class="glass-input w-full px-3 py-2"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Loyalty Tier Classification</label>
+                                    <select id="cust-tier" class="glass-input w-full px-3 py-2">
+                                        <option value="Bronze">Bronze Tier</option>
+                                        <option value="Silver">Silver Tier</option>
+                                        <option value="Gold VIP">Gold VIP</option>
+                                    </select>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 pt-2">
+                                    <button type="button" onclick="saveCustomer()" class="glass-btn-primary py-2 text-xs">Enrol Client</button>
+                                    <button type="button" onclick="updateCustomer()" class="glass-btn-secondary py-2 text-xs">Update</button>
+                                    <button type="button" onclick="deleteCustomer()" class="glass-btn-danger py-2 text-xs">Remove</button>
+                                    <button type="button" onclick="clearCustomerForm()" class="glass-btn-ghost py-2 text-xs">Reset</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="lg:col-span-2 glass-card p-6 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-bold text-white text-sm">Enrolled Client Directory</h3>
+                                    <p class="text-xs text-zinc-400">Click a record to inspect or modify details</p>
+                                </div>
+                                <div class="relative w-64">
+                                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-zinc-500"></i>
+                                    <input type="text" id="cust-search" oninput="loadCustomers(this.value)" placeholder="Search name or contact..."
+                                           class="glass-input w-full pl-9 pr-3 py-1.5 text-xs">
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto flex-1 max-h-[480px]">
+                                <table class="glass-table">
+                                    <thead class="sticky top-0 z-10">
+                                        <tr>
+                                            <th>Identifier</th>
+                                            <th>Client Name</th>
+                                            <th>Contact Hotline</th>
+                                            <th>Loyalty Tier</th>
+                                            <th>Address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customers-tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========== 5. SUPPLIERS VIEW ========== -->
+                <section id="view-suppliers" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="glass-card p-6">
+                            <h3 class="font-bold text-white text-sm mb-4">Supply Partner Credentials</h3>
+                            <form id="supplier-form" class="space-y-4">
+                                <input type="hidden" id="supp-id">
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Company / Entity Name *</label>
+                                    <input type="text" id="supp-name" required placeholder="Lanka Pharma Distributors"
+                                           class="glass-input w-full px-3 py-2">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Official Communications Email</label>
+                                    <input type="email" id="supp-email" placeholder="info@supplier.com"
+                                           class="glass-input w-full px-3 py-2">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Hotline Contact *</label>
+                                    <input type="text" id="supp-contact" required placeholder="0772345678"
+                                           class="glass-input w-full px-3 py-2 font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Reliability Index</label>
+                                    <input type="text" id="supp-rating" placeholder="5.0 ★"
+                                           class="glass-input w-full px-3 py-2 font-mono">
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 pt-2">
+                                    <button type="button" onclick="saveSupplier()" class="glass-btn-primary py-2 text-xs">Save Partner</button>
+                                    <button type="button" onclick="updateSupplier()" class="glass-btn-secondary py-2 text-xs">Update</button>
+                                    <button type="button" onclick="deleteSupplier()" class="glass-btn-danger py-2 text-xs">Remove</button>
+                                    <button type="button" onclick="clearSupplierForm()" class="glass-btn-ghost py-2 text-xs">Reset</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="lg:col-span-2 glass-card p-6 flex flex-col">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-bold text-white text-sm">Allied Supply Partners</h3>
+                                    <p class="text-xs text-zinc-400">Authenticated vendor registry</p>
+                                </div>
+                                <div class="relative w-64">
+                                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-zinc-500"></i>
+                                    <input type="text" id="supp-search" oninput="loadSuppliers(this.value)" placeholder="Search supplier..."
+                                           class="glass-input w-full pl-9 pr-3 py-1.5 text-xs">
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto flex-1 max-h-[480px]">
+                                <table class="glass-table">
+                                    <thead class="sticky top-0 z-10">
+                                        <tr>
+                                            <th>Identifier</th>
+                                            <th>Partner Entity</th>
+                                            <th>Email</th>
+                                            <th>Hotline</th>
+                                            <th>Reliability Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="suppliers-tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========== 6. SUPPLY INFLOW REFILL VIEW ========== -->
+                <section id="view-supply" class="hidden space-y-6">
+                    <div class="glass-card p-6">
+                        <div class="mb-4">
+                            <h3 class="font-bold text-white text-sm">Inflow Replenishment Dock</h3>
+                            <p class="text-xs text-zinc-400">Commits incoming batch shipments directly into active catalogue inventory</p>
+                        </div>
+                        <form id="supply-form" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3 items-end">
+                            <div class="lg:col-span-2">
+                                <label class="block text-xs font-semibold text-zinc-300 mb-1">Partner Supplier *</label>
+                                <select id="supply-supplier-id" required class="glass-input w-full px-3 py-2 text-xs"></select>
+                            </div>
+                            <div class="lg:col-span-2">
+                                <label class="block text-xs font-semibold text-zinc-300 mb-1">Target Medication *</label>
+                                <select id="supply-med-id" required class="glass-input w-full px-3 py-2 text-xs"></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-300 mb-1">Restock Date</label>
+                                <input type="date" id="supply-date" class="glass-input w-full px-3 py-2 text-xs font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-300 mb-1">Units Inflow *</label>
+                                <input type="number" id="supply-qty" min="1" required placeholder="Qty" oninput="calculateSupplyTotal()"
+                                       class="glass-input w-full px-3 py-2 text-xs font-mono font-semibold">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-300 mb-1">Unit Cost (Rs) *</label>
+                                <input type="number" id="supply-unit-cost" step="0.01" min="0" required placeholder="Cost" oninput="calculateSupplyTotal()"
+                                       class="glass-input w-full px-3 py-2 text-xs font-mono font-semibold">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-300 mb-1">Total Bill (Rs)</label>
+                                <input type="text" id="supply-total-cost" readonly placeholder="0.00"
+                                       class="glass-input w-full px-3 py-2 text-xs font-mono text-zinc-300">
+                            </div>
+                            <div class="lg:col-span-2">
+                                <button type="button" onclick="recordSupply()" class="glass-btn-primary w-full py-2.5 text-xs font-semibold">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                    <span>Commit Inflow Restock</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="glass-card p-6 flex flex-col">
+                        <div class="mb-4">
+                            <h3 class="font-bold text-white text-sm">Inflow Audit History</h3>
+                            <p class="text-xs text-zinc-400">Chronological ledger of inventory arrivals</p>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="glass-table">
+                                <thead>
+                                    <tr>
+                                        <th>Refill ID</th>
+                                        <th>Supplier Partner</th>
+                                        <th>Medication</th>
+                                        <th>Date</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Cost</th>
+                                        <th>Total Value</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="supplies-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========== 7. DR. PILLBOT (AI PHARMACIST LAB) ========== -->
+                <section id="view-ai" class="hidden space-y-6">
+                    <div class="glass-card p-8 relative overflow-hidden">
+                        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+                            <div>
+                                <div class="inline-flex items-center gap-1.5 px-2.5 py-1 glass-well text-xs font-mono text-zinc-300 mb-3">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-400"></i>
+                                    <span>Clinical Heuristic Advisor</span>
+                                </div>
+                                <h2 class="text-2xl font-bold tracking-tight text-white">Pharmacological Interaction &amp; Symptom Intelligence</h2>
+                                <p class="text-zinc-400 text-xs mt-1.5 max-w-xl leading-relaxed">
+                                    Consult the heuristic clinical engine for drug interaction checks, supplement stacking, dosage protocols, and contraindication notices.
+                                </p>
+                            </div>
+                            <div class="w-14 h-14 rounded-2xl glass-well flex items-center justify-center shrink-0">
+                                <i data-lucide="stethoscope" class="w-7 h-7 text-emerald-400"></i>
+                            </div>
+                        </div>
+
+                        <!-- Prompt Chips -->
+                        <div class="mt-6 flex flex-wrap gap-2">
+                            <button onclick="askBot('headache')" class="glass-btn-secondary text-xs py-1.5 px-3">Headache Relief</button>
+                            <button onclick="askBot('vitamin')" class="glass-btn-secondary text-xs py-1.5 px-3">Vitamin Stacking</button>
+                            <button onclick="askBot('antibiotic')" class="glass-btn-secondary text-xs py-1.5 px-3">Antibiotic Rules</button>
+                            <button onclick="askBot('sleep')" class="glass-btn-secondary text-xs py-1.5 px-3">Deep Sleep Optimization</button>
+                            <button onclick="askBot('energy')" class="glass-btn-secondary text-xs py-1.5 px-3">Sustained Clean Energy</button>
+                        </div>
+
+                        <!-- Consultation Input Bar -->
+                        <div class="mt-5 flex gap-2">
+                            <input type="text" id="ai-query-input" placeholder="Query a medication symptom or pharmacological interaction..."
+                                   class="glass-input w-full px-4 py-3 text-sm">
+                            <button onclick="submitAiQuery()" class="glass-btn-primary px-6 py-3 text-xs font-semibold whitespace-nowrap">
+                                <span>Consult Engine</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- AI Response Display Card -->
+                    <div id="ai-result-card" class="hidden glass-card p-6 space-y-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl font-mono text-emerald-400" id="ai-emoji">✦</span>
+                            <div>
+                                <h3 class="font-bold text-white text-sm" id="ai-title">Clinical Wellness Note</h3>
+                                <p class="text-xs text-zinc-400">Generated by pharma.Co Clinical Heuristic Engine</p>
+                            </div>
+                        </div>
+                        <div class="glass-well p-4 text-xs text-zinc-200 leading-relaxed font-sans" id="ai-advice">
+                        </div>
+                        <div class="flex items-center gap-2.5 text-xs text-amber-300 glass-well p-3 border border-amber-500/20">
+                            <i data-lucide="alert-triangle" class="w-4 h-4 shrink-0 text-amber-400"></i>
+                            <span id="ai-warning"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ========== 8. STAFF & USERS VIEW ========== -->
+                <section id="view-users" class="hidden space-y-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="glass-card p-6">
+                            <h3 class="font-bold text-white text-sm mb-4">Staff Account Privileges</h3>
+                            <form id="user-form" class="space-y-4">
+                                <input type="hidden" id="user-id">
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Operator Username *</label>
+                                    <input type="text" id="user-name" required placeholder="pharmacist1"
+                                           class="glass-input w-full px-3 py-2">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Corporate Email *</label>
+                                    <input type="email" id="user-email" required placeholder="user@pharmaco.com"
+                                           class="glass-input w-full px-3 py-2">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Session Passkey *</label>
+                                    <input type="password" id="user-pwd" placeholder="Enter password"
+                                           class="glass-input w-full px-3 py-2">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1">Role Privilege *</label>
+                                    <select id="user-role" class="glass-input w-full px-3 py-2">
+                                        <option value="employee">Employee / Apothecary Staff</option>
+                                        <option value="admin">Administrator (Full Access)</option>
+                                    </select>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2 pt-2">
+                                    <button type="button" onclick="saveUser()" class="glass-btn-primary py-2 text-xs">Create Staff</button>
+                                    <button type="button" onclick="updateUser()" class="glass-btn-secondary py-2 text-xs">Update</button>
+                                    <button type="button" onclick="deleteUser()" class="glass-btn-danger py-2 text-xs">Revoke</button>
+                                    <button type="button" onclick="clearUserForm()" class="glass-btn-ghost py-2 text-xs">Reset</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="lg:col-span-2 glass-card p-6 flex flex-col">
+                            <div class="mb-4">
+                                <h3 class="font-bold text-white text-sm">Operator Governance Ledger</h3>
+                                <p class="text-xs text-zinc-400">Authenticated personnel accounts</p>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="glass-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Operator ID</th>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Role Classification</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="users-tbody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ================= THERMAL RECEIPT / INVOICE MODAL ================= -->
+    <div id="receipt-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 glass-modal-backdrop">
+        <div id="receipt-modal-content" class="glass-modal-sheet max-w-sm w-full p-6">
+            <!-- Header -->
+            <div class="text-center pb-4 border-b border-white/[0.12]">
+                <div class="w-10 h-10 mx-auto mb-2 rounded-xl bg-white/[0.08] border border-white/[0.18] flex items-center justify-center">
+                    <i data-lucide="pill" class="w-5 h-5 text-emerald-400"></i>
+                </div>
+                <h2 class="text-base font-bold tracking-tight text-white uppercase">pharma<span class="text-emerald-400">.Co</span></h2>
+                <p class="text-[11px] text-zinc-400">Clinical Dispensary &amp; Wellness OS</p>
+                <div class="mt-2 inline-block px-2.5 py-0.5 glass-well text-zinc-300 font-mono text-[11px] font-semibold">
+                    ORDER #<span id="rec-order-id">ORD-000</span>
+                </div>
+            </div>
+
+            <!-- Receipt Metadata -->
+            <div class="py-3 border-b border-white/[0.08] text-xs space-y-1 text-zinc-300">
+                <div class="flex justify-between">
+                    <span class="text-zinc-500">Timestamp:</span>
+                    <span class="font-mono text-[11px]" id="rec-date">2026-11-03</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-zinc-500">Member:</span>
+                    <span class="font-medium text-white" id="rec-customer">Walk-in</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-zinc-500">Dispenser:</span>
+                    <span class="font-mono text-zinc-300" id="rec-cashier">admin</span>
+                </div>
+            </div>
+
+            <!-- Receipt Line Items -->
+            <div class="py-3 border-b border-white/[0.08]">
+                <table class="w-full text-xs">
+                    <thead>
+                        <tr class="text-[10px] uppercase font-mono text-zinc-500 text-left border-b border-white/[0.06]">
+                            <th class="pb-1.5">Item</th>
+                            <th class="pb-1.5 text-center">Qty</th>
+                            <th class="pb-1.5 text-right">Rate</th>
+                            <th class="pb-1.5 text-right">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rec-items-tbody">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Receipt Totals -->
+            <div class="py-3 border-b border-white/[0.08] text-xs space-y-1.5 font-mono">
+                <div class="flex justify-between text-zinc-400">
+                    <span>Subtotal:</span>
+                    <span id="rec-subtotal" class="text-zinc-200">Rs. 0.00</span>
+                </div>
+                <div class="flex justify-between text-emerald-400 font-medium" id="rec-discount-row">
+                    <span>Promo Discount:</span>
+                    <span id="rec-discount">-Rs. 0.00</span>
+                </div>
+                <div class="flex justify-between font-bold text-sm text-white pt-1 border-t border-white/[0.08]">
+                    <span>Grand Total:</span>
+                    <span id="rec-total" class="text-emerald-400">Rs. 0.00</span>
+                </div>
+                <div class="flex justify-between text-zinc-400 pt-1 text-[11px]">
+                    <span>Tendered (<span id="rec-method">Cash</span>):</span>
+                    <span id="rec-paid" class="text-zinc-300">Rs. 0.00</span>
+                </div>
+                <div class="flex justify-between text-zinc-300 font-semibold text-[11px]">
+                    <span>Change Returned:</span>
+                    <span id="rec-balance" class="text-emerald-400">Rs. 0.00</span>
+                </div>
+            </div>
+
+            <!-- Clinical Heuristic Advisory -->
+            <div class="py-2.5 text-center glass-well my-2.5 p-2">
+                <p class="text-[10px] font-mono uppercase tracking-wider text-emerald-400">Clinical Prescription Advisory</p>
+                <p class="text-[11px] text-zinc-300 italic mt-0.5" id="rec-fun-tip">Hydrate regularly &amp; consult pharmacist guidance.</p>
+            </div>
+
+            <!-- Barcode Indicator -->
+            <div class="text-center pt-1">
+                <div class="font-mono text-xs tracking-widest text-zinc-600">||| ||||| |||| |||| |||||||| ||||</div>
+                <p class="text-[10px] text-zinc-500 font-mono mt-1">pharma.Co Dispensary Assurance</p>
+            </div>
+
+            <!-- Print Action Buttons -->
+            <div class="mt-4 grid grid-cols-2 gap-2 no-print">
+                <button onclick="window.print()" class="glass-btn-primary py-2 text-xs font-semibold">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i>
+                    <span>Print Bill</span>
+                </button>
+                <button onclick="closeReceiptModal()" class="glass-btn-secondary py-2 text-xs">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="/app.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
